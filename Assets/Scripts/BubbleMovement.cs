@@ -45,14 +45,14 @@ public class BubbleMovement : MonoBehaviour {
 			}
 		}
 
-		if (hitAnim.GetCurrentAnimatorStateInfo(0).shortNameHash != Animator.StringToHash("BubbleHitAnimation") && 
+		if (hitAnim.GetCurrentAnimatorStateInfo(0).shortNameHash == Animator.StringToHash("BubbleHitAnimation") && 
 			hitAnim.GetBool("bubbleHit")) {
 			hitAnim.SetBool ("bubbleHit", false);
 		}
 		if (other.tag == "Player") {
 			print ("0");
 			triangle.score = 0;
-			triangle.Speed -= 4;
+			triangle.Speed += Speed;
 			if (hitAnim.GetCurrentAnimatorStateInfo(0).shortNameHash != Animator.StringToHash("BubbleHitAnimation")) {
 				hitAnim.SetBool ("bubbleHit", true);
 

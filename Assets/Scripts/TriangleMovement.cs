@@ -3,7 +3,7 @@ using System.Collections;
 
 public class TriangleMovement : MonoBehaviour {
 
-	public int score = 0;
+	public int score;
 	int prevScore = 0;
 
 	public float Speed = 10f;
@@ -29,6 +29,8 @@ public class TriangleMovement : MonoBehaviour {
 
 	Animator anim;
 
+	float time;
+
 	// Use this for initialization
 	void Start () {
 		body = GetComponent<Rigidbody2D>();
@@ -43,6 +45,11 @@ public class TriangleMovement : MonoBehaviour {
 		}
 
 		CreateRandomBubble ();
+
+		PlayerManager pm = GameObject.FindObjectOfType<PlayerManager> ();
+		if (pm.continuation) {
+			score = PlayerPrefs.GetInt ("Player Score");
+		}
 	}
 
 	// Update is called once per frame
@@ -90,13 +97,17 @@ public class TriangleMovement : MonoBehaviour {
 				GameObject.FindObjectOfType<BubbleMovement> ().gameObject.GetComponent<AudioSource> ().Play ();
 			} 
 			anim.SetBool ("scoreChange", true);
-			anim.speed = 0.1f;
-		} else if (anim.GetCurrentAnimatorStateInfo(0).shortNameHash != Animator.StringToHash("PlayerAnimation") && anim.GetBool("scoreChange")) {
-			GetComponentInChildren<TextMesh>().text = "";
+			time = Time.time;
 		}
 		prevScore = score;
 
 		PlayerPrefs.SetInt ("Player Score", Mathf.Max (score, PlayerPrefs.GetInt ("Player Score")));
+
+
+		if (Time.time > time + anim.GetCurrentAnimatorStateInfo(0).length) {
+			GetComponentInChildren<TextMesh>().text = "";
+			anim.SetBool ("scoreChange", false);
+		}
 	}
 
 	void CreateRandomSquare() {
